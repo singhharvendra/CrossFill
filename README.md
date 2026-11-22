@@ -16,16 +16,7 @@ reads a record (from a web page, JSON or CSV), opens the target form, finds
 the matching fields, fills them, **reads every value back to verify it**,
 and stops. You review the form and press Submit yourself.
 
-```
- Source (web page, JSON, CSV)              Target form
- ┌──────────────────────┐   CrossFill   ┌──────────────────────────────┐
- │ name    Ada L.       │ ────────────► │ #ufullname   Ada L.        ✓ │
- │ email   ada@...      │  read → match │ #uemailid    ada@...       ✓ │
- │ topic   Support      │  → fill →     │ <select>     Support       ✓ │
- │ newsletter  yes      │  verify       │ [x] newsletter             ✓ │
- └──────────────────────┘               └──────────────[ Submit ]─────┘
-                                                        ▲ you press this
-```
+![CrossFill demo: Form A data is confirmed, filled into Form B field by field and verified, then you press Submit](docs/images/crossfill-demo.gif)
 
 ## Quick start
 
@@ -101,14 +92,14 @@ shows which Form B field each value will go to.
 Every field is required except the newsletter. Choose a **Topic**, change
 anything else you like, then click **Transfer to Form B**.
 
-![Form A, the source form, with sample data and the Form B field mapping](https://raw.githubusercontent.com/singhharvendra/CrossFill/main/docs/images/1-form-a-source.png)
+![Form A, the source form, with sample data and the Form B field mapping](docs/images/1-form-a-source.png)
 
 ### Step 2: Confirm the transfer
 
 CrossFill shows exactly what it is about to copy and where it will go.
 Click **Fill Form B** to continue, or **Cancel** to stop.
 
-![Confirmation dialog listing every value before the transfer](https://raw.githubusercontent.com/singhharvendra/CrossFill/main/docs/images/2-confirm-transfer.png)
+![Confirmation dialog listing every value before the transfer](docs/images/2-confirm-transfer.png)
 
 ### Step 3: Review the filled Form B
 
@@ -118,7 +109,7 @@ button and checkbox. CrossFill reads each value back to check it. Then it
 
 Look over the form, fix anything you want, and press **Submit** yourself.
 
-![Form B filled in by CrossFill, waiting for you to press Submit](https://raw.githubusercontent.com/singhharvendra/CrossFill/main/docs/images/3-form-b-filled.png)
+![Form B filled in by CrossFill, waiting for you to press Submit](docs/images/3-form-b-filled.png)
 
 ### Step 4: See what Form B received
 
@@ -126,7 +117,7 @@ After you press Submit, the test Form B shows what it received. This is a
 local test form, so the data stays in memory on your computer and is not
 sent anywhere.
 
-![Form B confirmation showing the received values](https://raw.githubusercontent.com/singhharvendra/CrossFill/main/docs/images/4-form-b-received.png)
+![Form B confirmation showing the received values](docs/images/4-form-b-received.png)
 
 ### What happened behind the scenes
 
