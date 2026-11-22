@@ -3,8 +3,6 @@
 **Copy data from one web application into another's form, with automatic field matching. A human always presses Submit.**
 
 [![CI](https://github.com/singhharvendra/CrossFill/actions/workflows/ci.yml/badge.svg)](https://github.com/singhharvendra/CrossFill/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/crossfill.svg)](https://pypi.org/project/crossfill/)
-[![Python](https://img.shields.io/pypi/pyversions/crossfill.svg)](https://pypi.org/project/crossfill/)
 [![License: MIT-0](https://img.shields.io/badge/License-MIT--0-blue.svg)](LICENSE)
 
 Many teams still re-type the same record from one system into another
