@@ -29,8 +29,8 @@ def test_local_form_b_serves_same_fields(crossfill_app):
     records a manual submission in memory."""
     base, module = crossfill_app
     html = requests.get(f"{base}/form-b", timeout=30).text
-    for field_id in ("ufullname", "uemailid", "ucontactno", "umsg", "utopic", "ucontactpref_email", "ucontactpref_phone",
-                     "unewsletter"):
+    for field_id in ("ufullname", "uemailid", "ucontactno", "umsg", "utopic",
+                     "ucontactpref_email", "ucontactpref_phone", "unewsletter"):
         assert f'id="{field_id}"' in html
 
     module.FORM_B_SUBMISSIONS.clear()
