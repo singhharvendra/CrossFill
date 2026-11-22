@@ -1,0 +1,28 @@
+{
+  "$schema": "../schema/mapping.schema.json",
+  "version": 1,
+  "name": "CrossFill test Form B (local)",
+  "description": "The demo target served by `crossfill serve` at /form-b. Copy this file to support a new site.",
+  "target_url": "http://127.0.0.1:5000/form-b",
+  "form_selector": "form:has(#ufullname)",
+  "source": {
+    "fields": {
+      "name": "#name",
+      "email": "#email",
+      "phone": "#phone",
+      "message": "#message",
+      "topic": "#topic",
+      "contact_method": "input[name='contact_method']",
+      "newsletter": "#newsletter"
+    }
+  },
+  "fields": {
+    "name": "#ufullname",
+    "email": "#uemailid",
+    "phone": "#ucontactno",
+    "message": "#umsg",
+    "topic": "#utopic",
+    "contact_method": "input[name='ucontactpref']",
+    "newsletter": "#unewsletter"
+  }
+}

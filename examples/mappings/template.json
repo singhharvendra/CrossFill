@@ -1,0 +1,17 @@
+{
+  "$schema": "../../crossfill/schema/mapping.schema.json",
+  "version": 1,
+  "name": "Example: a contact form on another site",
+  "description": "Copy this file, change target_url and the selectors, then run `crossfill validate` and `crossfill run --dry-run`.",
+  "target_url": "https://example.com/contact",
+  "form_selector": "form#contact",
+  "fields": {
+    "name": "input[name='full_name']",
+    "email": "input[type='email']",
+    "country": "select#country",
+    "terms": "input[name='accept_terms']"
+  },
+  "synonyms": {
+    "message": ["how can we help", "your question"]
+  }
+}

@@ -1,0 +1,36 @@
+name: Bug report
+description: Something did not fill, filled the wrong field, or crashed
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! **Do not paste real personal data.** CrossFill's logs
+        contain field names and selectors only, never values, so `-v` output is safe to share.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you expected, and what CrossFill did instead.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: The command you ran and your mapping file (redact private URLs if needed).
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Output of `crossfill -v run ... --dry-run`
+      render: text
+  - type: input
+    id: version
+    attributes:
+      label: Versions
+      description: "`crossfill --version`, Python version, OS, browser"
+    validations:
+      required: true

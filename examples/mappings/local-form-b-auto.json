@@ -1,0 +1,9 @@
+{
+  "$schema": "../../crossfill/schema/mapping.schema.json",
+  "version": 1,
+  "name": "Local test Form B, automatic matching only",
+  "description": "No selectors at all: every field is found by name, id, placeholder or label.",
+  "target_url": "http://127.0.0.1:5000/form-b",
+  "form_selector": "form:visible",
+  "fields": {}
+}

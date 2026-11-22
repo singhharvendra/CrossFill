@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CrossFill - Form A (Source)</title>
+<style>
+  :root { --blue:#1f4e9c; --green:#1a8f3c; --ink:#1d2433; --muted:#667085; --line:#d9dee8; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color:var(--ink); background:#f4f6fa; }
+  header { background:var(--ink); color:#fff; padding:16px 24px; display:flex; align-items:baseline; gap:12px; }
+  header h1 { margin:0; font-size:22px; } header span { color:#aab3c5; font-size:14px; }
+  main { max-width:960px; margin:32px auto; padding:0 16px; display:grid; grid-template-columns: 1fr 64px 1fr; gap:16px; align-items:center; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .card h2 { margin:0; padding:12px 16px; background:var(--blue); color:#fff; font-size:16px; }
+  .card .body { padding:16px; }
+  label { display:block; font-size:14px; font-weight:600; margin:12px 0 4px; }
+  input, textarea, select { width:100%; padding:9px 10px; border:1px solid var(--line); border-radius:6px; font:inherit; background:#fff; }
+  input[type=radio], input[type=checkbox] { width:auto; }
+  label.check { display:flex; gap:8px; align-items:center; font-weight:400; margin:6px 0; }
+  .hint { margin:0 0 4px; font-size:13px; color:var(--muted); }
+  fieldset { border:0; padding:0; margin:12px 0 0; }
+  legend { font-size:14px; font-weight:600; padding:0; margin-bottom:2px; }
+  textarea { min-height:90px; resize:vertical; }
+  .arrow { font-size:40px; color:#e8772e; text-align:center; }
+  .target code { display:block; word-break:break-all; background:#f4f6fa; padding:8px; border-radius:6px; margin-top:6px; }
+  .target table { width:100%; border-collapse:collapse; font-size:14px; margin-top:12px; }
+  .target td { padding:6px 4px; border-bottom:1px solid var(--line); }
+  .target td:last-child { color:var(--muted); font-family: ui-monospace, monospace; }
+  button { font:inherit; border:0; border-radius:6px; padding:10px 16px; cursor:pointer; }
+  .primary { background:var(--green); color:#fff; width:100%; margin-top:16px; font-weight:600; }
+  .secondary { background:#e9edf4; color:var(--ink); }
+  .warn { background:#c2410c; color:#fff; }
+  #status { grid-column: 1 / -1; display:none; padding:12px 16px; border-radius:8px; white-space:pre-wrap; font-size:14px; }
+  #status.ok { display:block; background:#e7f6ec; border:1px solid #9ad3ad; }
+  #status.err { display:block; background:#fdecec; border:1px solid #f1a5a5; }
+  #status.busy { display:block; background:#eef3fb; border:1px solid #b9cbe9; }
+  dialog { border:0; border-radius:12px; padding:0; width:min(480px, 92vw); box-shadow:0 20px 60px rgba(0,0,0,.25); }
+  dialog::backdrop { background:rgba(15,20,30,.45); }
+  dialog .head { background:var(--ink); color:#fff; padding:14px 18px; font-weight:600; }
+  dialog .content { padding:16px 18px; font-size:14px; }
+  dialog dl { display:grid; grid-template-columns:90px 1fr; gap:6px 10px; margin:10px 0; }
+  dialog dt { color:var(--muted); } dialog dd { margin:0; word-break:break-word; }
+  dialog .actions { display:flex; gap:8px; justify-content:flex-end; padding:0 18px 16px; flex-wrap:wrap; }
+  @media (max-width: 760px) { main { grid-template-columns:1fr; } .arrow { transform:rotate(90deg); } }
+</style>
+</head>
+<body>
+<header><h1>CrossFill</h1><span>Read data from Form A and fill it into Form B. You always press Submit.</span></header>
+
+<main>
+  <section class="card">
+    <h2>Form A (Source)</h2>
+    <form id="form-a" class="body" autocomplete="on">
+      <p class="hint">All fields are required, except the newsletter.</p>
+      <label for="name">Name</label>
+      <input id="name" name="name" required value="{{ record.get('name', '') }}" {{ 'readonly' if readonly }}>
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required value="{{ record.get('email', '') }}" {{ 'readonly' if readonly }}>
+      <label for="phone">Phone</label>
+      <input id="phone" name="phone" type="tel" required value="{{ record.get('phone', '') }}" {{ 'readonly' if readonly }}>
+      <label for="message">Message</label>
+      <textarea id="message" name="message" required {{ 'readonly' if readonly }}>{{ record.get('message', '') }}</textarea>
+
+      <label for="topic">Topic</label>
+      <select id="topic" name="topic" required {{ 'disabled' if readonly }}>
+        <option value="">Choose a topic</option>
+        {% for value, text in [('sales', 'Sales'), ('support', 'Support'), ('other', 'Other')] %}
+        <option value="{{ value }}" {{ 'selected' if record.get('topic', '')|lower in (value, text|lower) }}>{{ text }}</option>
+        {% endfor %}
+      </select>
+
+      <fieldset>
+        <legend>Preferred contact</legend>
+        {% for value, text in [('email', 'Email'), ('phone', 'Phone')] %}
+        <label class="check"><input type="radio" name="contact_method" id="contact_{{ value }}" value="{{ value }}" required
+          {{ 'checked' if record.get('contact_method', '')|lower == value }} {{ 'disabled' if readonly }}> {{ text }}</label>
+        {% endfor %}
+      </fieldset>
+
+      <label class="check"><input type="checkbox" id="newsletter" name="newsletter" value="yes"
+        {{ 'checked' if record.get('newsletter', '')|string|lower in ('true', 'yes', '1', 'on') }} {{ 'disabled' if readonly }}> Send me the newsletter</label>
+      {% if not readonly %}<button type="submit" class="primary" id="transfer">Transfer to Form B</button>{% endif %}
+    </form>
+  </section>
+
+  <div class="arrow" aria-hidden="true">&#10140;</div>
+
+  <section class="card target">
+    <h2>Form B (Target)</h2>
+    <div class="body">
+      Target page:
+      <code>{{ target_url }}</code>
+      <table>
+        {% for key in fields %}
+        <tr><td>{{ key | replace('_', ' ') | capitalize }}</td><td>{{ target_fields.get(key, 'auto-match') }}</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+  </section>
+
+  <div id="status" role="status"></div>
+</main>
+
+<dialog id="prompt">
+  <div class="head">Transfer this data to Form B?</div>
+  <div class="content">
+    <div>Target: <strong>{{ target_url }}</strong></div>
+    <dl id="summary"></dl>
+    <div>A browser window will open and fill the form. CrossFill does not submit it. Review the form and press the site's Submit button yourself.</div>
+  </div>
+  <div class="actions">
+    <button class="secondary" value="cancel" id="cancel">Cancel</button>
+    <button class="primary" id="fill-only" style="width:auto;margin-top:0">Fill Form B</button>
+  </div>
+</dialog>
+
+<script>
+const form = document.getElementById('form-a');
+const dlg = document.getElementById('prompt');
+const statusBox = document.getElementById('status');
+const FIELDS = {{ fields | tojson }};
+
+function show(cls, text) { statusBox.className = cls; statusBox.textContent = text; }
+// Read every Form A field as text: checkbox -> "true"/"false", radio group -> chosen value.
+function value(k) {
+  const el = form.elements[k];
+  if (el instanceof RadioNodeList) return (el.value || '').trim();
+  if (el.type === 'checkbox') return el.checked ? 'true' : 'false';
+  return el.value.trim();
+}
+function data() { return Object.fromEntries(FIELDS.map(k => [k, value(k)])); }
+
+form?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (!form.reportValidity()) return;
+  const d = data();
+  const summary = document.getElementById('summary');
+  summary.replaceChildren();
+  for (const k of FIELDS) {
+    const label = k.replace('_', ' ');
+    const dt = document.createElement('dt'); dt.textContent = label[0].toUpperCase() + label.slice(1);
+    const dd = document.createElement('dd'); dd.textContent = d[k] || '-';
+    summary.append(dt, dd);
+  }
+  dlg.showModal();
+});
+
+document.getElementById('cancel').onclick = () => dlg.close();
+document.getElementById('fill-only').onclick = () => run();
+
+async function run() {
+  dlg.close();
+  const btn = document.getElementById('transfer');
+  btn.disabled = true;
+  show('busy', 'Transferring... a browser window is opening.');
+  try {
+    const res = await fetch('/api/transfer', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data())
+    });
+    const r = await res.json();
+    if (r.ok) {
+      const lines = Object.entries(r.verified).map(([k, v]) => `  ${k} -> ${r.filled[k]} = "${v}"`);
+      show('ok', 'Form B filled (not submitted). Review it in the browser window and press Submit when ready.'
+        + '\n' + lines.join('\n'));
+    } else {
+      show('err', 'Transfer failed: ' + (r.error || ('unmatched fields: ' + (r.unmatched || []).join(', '))));
+    }
+  } catch (err) {
+    show('err', 'Transfer failed: ' + err);
+  } finally {
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
