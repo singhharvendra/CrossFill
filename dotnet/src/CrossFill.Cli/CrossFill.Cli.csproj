@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <RootNamespace>CrossFill.Cli</RootNamespace>
-    <AssemblyName>crossfill</AssemblyName>
+    <AssemblyName>CrossFill.Cli</AssemblyName>
     <IsPackable>true</IsPackable>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>crossfill</ToolCommandName>
@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CrossFill.Core\CrossFill.Core.csproj" />
+    <ProjectReference Include="..\CrossFill\CrossFill.csproj" />
     <ProjectReference Include="..\CrossFill.Web\CrossFill.Web.csproj" />
   </ItemGroup>
 

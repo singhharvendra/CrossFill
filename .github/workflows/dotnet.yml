@@ -33,9 +33,9 @@ jobs:
       - name: Build (warnings are errors)
         run: dotnet build -c Release
       - name: Install Chromium
-        run: dotnet src/CrossFill.Cli/bin/Release/net11.0/crossfill.dll playwright install --with-deps chromium
+        run: dotnet src/CrossFill.Cli/bin/Release/net11.0/CrossFill.Cli.dll playwright install --with-deps chromium
       - name: Validate shared and example mappings
-        run: dotnet src/CrossFill.Cli/bin/Release/net11.0/crossfill.dll validate ../spec/mappings/*.json ../examples/mappings/*.json
+        run: dotnet src/CrossFill.Cli/bin/Release/net11.0/CrossFill.Cli.dll validate ../spec/mappings/*.json ../examples/mappings/*.json
         shell: bash
       - name: Test (includes the shared conformance cases)
         run: dotnet test -c Release --no-build --collect "XPlat Code Coverage"

@@ -10,7 +10,7 @@ All notable changes are recorded here. The format follows
 - **A .NET implementation** in `dotnet/`, for .NET 11, with
   the same behaviour as the Python one: the `crossfill` tool (`run`,
   `validate`, `serve`, same options, exit codes and `CROSSFILL_RESULT` line),
-  the `CrossFill.Core` library, and the demo web app on ASP.NET Core. The tool
+  the `CrossFill` library, and the demo web app on ASP.NET. The tool
   also has `crossfill playwright install chromium` for installing the browser.
 - **Shared spec and conformance cases** in `spec/`: the mapping schema, the
   sample mapping and `spec/conformance/cases.json`, which both test suites run

@@ -12,7 +12,7 @@ same mapping files, same command-line options, same results.
 | Package | What it is |
 |---------|------------|
 | `CrossFill.Cli` | The `crossfill` command-line tool, including the local demo web app |
-| `CrossFill.Core` | The library: `MappingLoader`, `Sources`, `Matcher`, `Engine` |
+| `CrossFill` | The library: `MappingLoader`, `Sources`, `Matcher`, `Engine` |
 
 ## Install
 

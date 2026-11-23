@@ -1,7 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/CrossFill.Cli/CrossFill.Cli.csproj" />
-    <Project Path="src/CrossFill.Core/CrossFill.Core.csproj" />
+    <Project Path="src/CrossFill/CrossFill.csproj" />
     <Project Path="src/CrossFill.Web/CrossFill.Web.csproj" />
   </Folder>
   <Folder Name="/tests/">

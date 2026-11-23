@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\CrossFill.Core\CrossFill.Core.csproj" />
+    <ProjectReference Include="..\..\src\CrossFill\CrossFill.csproj" />
     <ProjectReference Include="..\..\src\CrossFill.Web\CrossFill.Web.csproj" />
     <ProjectReference Include="..\..\src\CrossFill.Cli\CrossFill.Cli.csproj" />
   </ItemGroup>

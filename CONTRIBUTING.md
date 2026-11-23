@@ -76,7 +76,7 @@ and with .NET 11.
 ### Adding matcher synonyms
 
 Built-in synonyms live in `python/crossfill/matcher.py` (`SYNONYMS`) and
-`dotnet/src/CrossFill.Core/Matcher.cs` (`BuiltInSynonyms`); keep the two lists
+`dotnet/src/CrossFill/Matcher.cs` (`BuiltInSynonyms`); keep the two lists
 identical. Put the most specific words first, add a `score` case to
 `spec/conformance/cases.json` showing the new match, and check that it doesn't
 steal another field's match.
@@ -97,5 +97,5 @@ Both implementations share one version number, but are released separately.
 2. Python: tag `py-vX.Y.Z` and push it. The `Release (Python)` workflow builds,
    publishes to PyPI through trusted publishing, and creates the GitHub release.
 3. .NET: tag `dotnet-vX.Y.Z` and push it. The `Release (.NET)` workflow packs
-   `CrossFill.Core` and `CrossFill.Cli`, pushes them to NuGet (secret
+   `CrossFill` and `CrossFill.Cli`, pushes them to NuGet (secret
    `NUGET_API_KEY`), and creates the GitHub release.

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <RootNamespace>CrossFill</RootNamespace>
     <IsPackable>true</IsPackable>
-    <PackageId>CrossFill.Core</PackageId>
+    <PackageId>CrossFill</PackageId>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
@@ -25,7 +25,7 @@
   <ItemGroup>
     <InternalsVisibleTo Include="CrossFill.Tests" />
     <InternalsVisibleTo Include="CrossFill.Web" />
-    <InternalsVisibleTo Include="crossfill" />
+    <InternalsVisibleTo Include="CrossFill.Cli" />
   </ItemGroup>
 
 </Project>

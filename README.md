@@ -30,8 +30,8 @@ serve the same demo. Pick whichever fits your stack.
 | Folder | [`python/`](python) | [`dotnet/`](dotnet) |
 | Requires | Python 3.9+ | .NET 11 |
 | Command line | `crossfill` | `crossfill` |
-| Library | `pip install crossfill` | `dotnet add package CrossFill.Core` |
-| Demo web app | Flask | ASP.NET Core |
+| Library | `pip install crossfill` | `dotnet add package CrossFill` |
+| Demo web app | Flask | ASP.NET |
 
 Both are tested against the same shared [conformance cases](spec/conformance/cases.json),
 so a mapping that works with one works with the other.
@@ -100,12 +100,12 @@ pip install -e ".[web]"
 
 ### .NET
 
-Requires the .NET 11 SDK (or the .NET 11 ASP.NET Core runtime for the tool alone).
+Requires the .NET 11 SDK (or the .NET 11 ASP.NET runtime for the tool alone).
 
 ```bash
 dotnet tool install --global CrossFill.Cli     # the crossfill command
 crossfill playwright install chromium          # optional: falls back to installed Chrome or Edge
-dotnet add package CrossFill.Core              # the library, for your own app
+dotnet add package CrossFill                   # the library, for your own app
 ```
 
 From source:
@@ -336,8 +336,8 @@ python/
 
 dotnet/
 ├── src/
-│   ├── CrossFill.Core/  # Mapping, Matcher, Sources, Engine (the library)
-│   ├── CrossFill.Web/   # demo app (ASP.NET Core + Razor): Form A, test Form B
+│   ├── CrossFill/       # Mapping, Matcher, Sources, Engine (the library)
+│   ├── CrossFill.Web/   # demo app (ASP.NET + Razor): Form A, test Form B
 │   └── CrossFill.Cli/   # the crossfill tool
 └── tests/CrossFill.Tests/   # unit, web, end-to-end and conformance tests
 ```

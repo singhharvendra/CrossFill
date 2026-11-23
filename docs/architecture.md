@@ -25,12 +25,12 @@ flowchart LR
 
 | Layer | Python | .NET | Responsibility | Needs a browser? |
 |-------|--------|------|----------------|------------------|
-| Mapping | `crossfill/mapping.py` | `CrossFill.Core/Mapping.cs` | Load, validate and default mapping files; env/CLI target override | no |
-| Sources | `crossfill/sources.py` | `CrossFill.Core/Sources.cs` | Read records from a web page, JSON or CSV into a flat string record | only for web pages |
-| Matcher | `crossfill/matcher.py` | `CrossFill.Core/Matcher.cs` | Score candidate elements against field synonyms (pure function) plus the JS that lists candidates | scoring: no |
-| Engine | `crossfill/engine.py` | `CrossFill.Core/Engine.cs` | Drive Playwright: open the target, two-pass matching, type-aware fill, read-back verification | yes |
+| Mapping | `crossfill/mapping.py` | `CrossFill/Mapping.cs` | Load, validate and default mapping files; env/CLI target override | no |
+| Sources | `crossfill/sources.py` | `CrossFill/Sources.cs` | Read records from a web page, JSON or CSV into a flat string record | only for web pages |
+| Matcher | `crossfill/matcher.py` | `CrossFill/Matcher.cs` | Score candidate elements against field synonyms (pure function) plus the JS that lists candidates | scoring: no |
+| Engine | `crossfill/engine.py` | `CrossFill/Engine.cs` | Drive Playwright: open the target, two-pass matching, type-aware fill, read-back verification | yes |
 | CLI | `crossfill/cli.py` | `CrossFill.Cli/Cli.cs` | `crossfill run / validate / serve`, exit codes, result line | — |
-| Demo app | `crossfill/web/` (Flask) | `CrossFill.Web/` (ASP.NET Core) | Local demo: Form A, a test Form B, `/api/transfer` | — |
+| Demo app | `crossfill/web/` (Flask) | `CrossFill.Web/` (ASP.NET) | Local demo: Form A, a test Form B, `/api/transfer` | — |
 
 ## Repository layout
 
@@ -41,7 +41,7 @@ spec/          shared by both implementations (the single source of truth)
 └── conformance/   behaviour cases both test suites run, plus their data files
 examples/      sample mappings and data, used by both
 python/        Python package, tests, run.bat
-dotnet/        .NET solution: CrossFill.Core, CrossFill.Web, CrossFill.Cli, tests, run.bat
+dotnet/        .NET solution: CrossFill, CrossFill.Web, CrossFill.Cli, tests, run.bat
 docs/          this documentation
 ```
 

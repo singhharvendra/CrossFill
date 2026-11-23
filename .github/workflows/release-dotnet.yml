@@ -1,4 +1,4 @@
-# Publishes the .NET packages (CrossFill.Core library, CrossFill.Cli tool) to NuGet
+# Publishes the .NET packages (CrossFill library, CrossFill.Cli tool) to NuGet
 # when a tag dotnet-v1.2.3 is pushed.
 # One-time setup: add a NuGet API key as the repository secret NUGET_API_KEY and
 # create a GitHub environment "nuget".
