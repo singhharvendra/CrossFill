@@ -13,3 +13,21 @@ coverage.xml
 htmlcov/
 .ruff_cache/
 .mypy_cache/
+*.py[cod]
+.tox/
+.nox/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Editors and OS
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+desktop.ini
+
+# Local Claude Code settings
+.claude/settings.local.json
