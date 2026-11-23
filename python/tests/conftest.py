@@ -12,7 +12,8 @@ from pathlib import Path
 
 import pytest
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent          # python/
+REPO_ROOT = ROOT.parent                                 # shared spec/ and examples/
 sys.path.insert(0, str(ROOT))
 
 # Text fields only: what a mapping without a "source" section reads from Form A.

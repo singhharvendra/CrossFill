@@ -7,7 +7,7 @@ Editors that understand JSON Schema (VS Code, JetBrains) give autocompletion
 and inline errors when the file starts with a `$schema` line:
 
 ```json
-{ "$schema": "../crossfill/schema/mapping.schema.json" }
+{ "$schema": "../spec/schema/mapping.schema.json" }
 ```
 
 Check a mapping at any time with:

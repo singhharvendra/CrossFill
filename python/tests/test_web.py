@@ -11,6 +11,19 @@ def test_rejects_missing_fields(crossfill_app):
     assert r.status_code == 400
 
 
+def test_transfer_accepts_only_json(crossfill_app):
+    """A cross-site form post cannot set Content-Type: application/json, so a
+    JSON-looking text/plain body must not start a transfer."""
+    import json
+
+    from conftest import SAMPLE
+
+    base, _ = crossfill_app
+    r = requests.post(f"{base}/api/transfer", data=json.dumps(SAMPLE),
+                      headers={"Content-Type": "text/plain"}, timeout=30)
+    assert r.status_code == 400
+
+
 def test_transfer_requires_every_field(crossfill_app):
     """Form A data must be complete (newsletter is optional) and the topic chosen."""
     from conftest import SAMPLE

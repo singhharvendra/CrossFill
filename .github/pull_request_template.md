@@ -4,7 +4,8 @@
 
 ## Checklist
 
-- [ ] Tests added or updated (`pytest`; browser tests use only the local test Form B)
-- [ ] `ruff check .` passes
+- [ ] Tests added or updated in **both** implementations (`pytest` and `dotnet test`; browser tests use only the local test Form B)
+- [ ] Behaviour changes have a case in `spec/conformance/cases.json`
+- [ ] `ruff check .` (in `python/`) and `dotnet build` (warnings are errors) pass
 - [ ] Docs / CHANGELOG updated if behaviour changed
 - [ ] CrossFill still never submits a form on its own

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <!-- The local demo app (Form A, test Form B, /api/transfer). Not published on its own:
+       it ships inside the crossfill tool as `crossfill serve`. -->
+  <PropertyGroup>
+    <RootNamespace>CrossFill.Web</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CrossFill.Core\CrossFill.Core.csproj" />
+  </ItemGroup>
+
+</Project>

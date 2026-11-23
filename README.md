@@ -2,7 +2,8 @@
 
 **Copy data from one web application into another's form, with automatic field matching. A human always presses Submit.**
 
-[![CI](https://github.com/singhharvendra/CrossFill/actions/workflows/ci.yml/badge.svg)](https://github.com/singhharvendra/CrossFill/actions/workflows/ci.yml)
+[![Python](https://github.com/singhharvendra/CrossFill/actions/workflows/python.yml/badge.svg)](https://github.com/singhharvendra/CrossFill/actions/workflows/python.yml)
+[![.NET](https://github.com/singhharvendra/CrossFill/actions/workflows/dotnet.yml/badge.svg)](https://github.com/singhharvendra/CrossFill/actions/workflows/dotnet.yml)
 [![License: MIT-0](https://img.shields.io/badge/License-MIT--0-blue.svg)](LICENSE)
 
 Many teams still re-type the same record from one system into another
@@ -18,24 +19,52 @@ and stops. You review the form and press Submit yourself.
 
 ![CrossFill demo: Form A data is confirmed, filled into Form B field by field and verified, then you press Submit](docs/images/crossfill-demo.gif)
 
+## Choose your implementation
+
+CrossFill comes in two versions that behave the same way. They read the same
+mapping files, take the same command-line options, give the same results and
+serve the same demo. Pick whichever fits your stack.
+
+| | **Python** | **.NET** |
+|---|---|---|
+| Folder | [`python/`](python) | [`dotnet/`](dotnet) |
+| Requires | Python 3.9+ | .NET 11 (latest) or .NET 10 (LTS) |
+| Command line | `crossfill` | `crossfill` |
+| Library | `pip install crossfill` | `dotnet add package CrossFill.Core` |
+| Demo web app | Flask | ASP.NET Core |
+
+Both are tested against the same shared [conformance cases](spec/conformance/cases.json),
+so a mapping that works with one works with the other.
+
 ## Quick start
+
+**Python**
 
 ```bash
 pip install "crossfill[web]"
 crossfill serve                     # then open http://127.0.0.1:5000
 ```
 
+**.NET**
+
+```bash
+dotnet tool install --global CrossFill.Cli
+crossfill playwright install chromium
+crossfill serve                     # then open http://127.0.0.1:5000
+```
+
 Form A is already filled with sample data. Choose a **Topic**, click **Transfer to Form B** and
-watch it fill in. On Windows, you can instead double-click `run.bat`, which does all of this for you.
-See the [demo walkthrough](#demo-walkthrough) for screenshots of each step.
+watch it fill in. On Windows, you can instead double-click `python/run.bat` or `dotnet/run.bat`,
+which does all of this for you. See the [demo walkthrough](#demo-walkthrough) for screenshots of
+each step.
 
 Free to use for anything: no permission or credit needed ([MIT-0](LICENSE)).
 
 ## Features
 
 - **Mapping as code.** Describe a target form once in a small,
-  [schema-checked](crossfill/schema/mapping.schema.json) JSON file, then review
-  it and keep it under version control.
+  [schema-checked](spec/schema/mapping.schema.json) JSON file, then review
+  it and keep it under version control. The same file works with both implementations.
 - **Automatic field matching.** Fields without a selector are found from
   their name, id, placeholder, aria-label and `<label>` text. You can add
   your own synonyms per mapping.
@@ -49,9 +78,11 @@ Free to use for anything: no permission or credit needed ([MIT-0](LICENSE)).
   without typing anything.
 - **Private by default.** Logs never contain field values. The demo server is
   limited to localhost.
-- **Three interfaces:** a CLI, a Python API, and a local web UI.
+- **Three interfaces:** a CLI, a library (Python or .NET), and a local web UI.
 
 ## Install
+
+### Python
 
 Requires Python 3.9+.
 
@@ -63,11 +94,30 @@ playwright install chromium        # optional: falls back to installed Chrome or
 From source:
 
 ```bash
-git clone https://github.com/singhharvendra/CrossFill.git && cd CrossFill
+git clone https://github.com/singhharvendra/CrossFill.git && cd CrossFill/python
 pip install -e ".[web]"
 ```
 
-On Windows you can double-click `run.bat`, which sets everything up and opens the demo.
+### .NET
+
+Requires the .NET 11 or .NET 10 SDK (or the ASP.NET Core runtime for the tool alone).
+
+```bash
+dotnet tool install --global CrossFill.Cli     # the crossfill command
+crossfill playwright install chromium          # optional: falls back to installed Chrome or Edge
+dotnet add package CrossFill.Core              # the library, for your own app
+```
+
+From source:
+
+```bash
+git clone https://github.com/singhharvendra/CrossFill.git && cd CrossFill/dotnet
+dotnet build
+dotnet run --project src/CrossFill.Cli -- serve
+```
+
+On Windows you can double-click `python/run.bat` or `dotnet/run.bat`, which
+sets everything up and opens the demo.
 
 ## Demo walkthrough
 
@@ -81,6 +131,8 @@ Start it with:
 ```bash
 crossfill serve                     # then open http://127.0.0.1:5000
 ```
+
+The steps and screens below are the same for both implementations.
 
 ### Step 1: Check the data in Form A
 
@@ -129,11 +181,13 @@ Form A  ──►  read every field  ──►  match each field  ──►  fil
 ```
 
 The links between Form A and Form B fields come from a small mapping file,
-[`crossfill/mappings/form_b.json`](crossfill/mappings/form_b.json). To use
+[`spec/mappings/form_b.json`](spec/mappings/form_b.json). To use
 CrossFill with your own website, copy that file and change the field
 selectors. See [Mapping file](#mapping-file) below.
 
 ## Command line
+
+The `crossfill` command is the same in both implementations.
 
 ```bash
 # From a JSON or CSV record (row 1 = second data row)
@@ -164,7 +218,13 @@ Exit codes: `0` all fields filled and verified · `1` incomplete or failed · `2
 bad arguments, mapping or data file. The CLI also prints one
 `CROSSFILL_RESULT {json}` line for scripts.
 
-## Python API
+The .NET tool has one extra command, `crossfill playwright ...`, which runs
+Playwright's own tool (for example `crossfill playwright install chromium`).
+Python users get the same thing from the `playwright` command.
+
+## Library
+
+**Python**
 
 ```python
 from crossfill import load_mapping, load_records, run_transfer
@@ -175,15 +235,28 @@ for record in load_records("contacts.csv"):
     print(result.summary())     # you review and submit each one, then close the window
 ```
 
-`run_transfer` returns a `TransferResult` with `ok`, `filled` (field →
-selector), `verified` (field → value now in the form), `unmatched`,
-`mismatched`, `skipped` and `error`.
+**.NET**
+
+```csharp
+using CrossFill;
+
+var mapping = MappingLoader.Load("my-site.json");
+foreach (var record in Sources.LoadRecords("contacts.csv"))
+{
+    var result = await Engine.RunTransferAsync(mapping: mapping, data: record, keepOpen: true);
+    Console.WriteLine(result.Summary());   // you review and submit each one, then close the window
+}
+```
+
+Both return a `TransferResult` with `ok`, `filled` (field → selector),
+`verified` (field → value now in the form), `unmatched`, `mismatched`,
+`skipped` and `error` (`Ok`, `Filled`, ... in .NET).
 
 ## Mapping file
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/singhharvendra/CrossFill/main/crossfill/schema/mapping.schema.json",
+  "$schema": "https://raw.githubusercontent.com/singhharvendra/CrossFill/main/spec/schema/mapping.schema.json",
   "version": 1,
   "name": "Partner contact form",
   "target_url": "https://partner.example/contact",
@@ -212,7 +285,7 @@ then run `crossfill validate` and a `--dry-run`. The full format is in
 | Copes with changed selectors | — | Re-record | Automatic matching fallback |
 | Verifies every value | No | Varies | Yes |
 | Submits for you | — | Usually | **Never, by design** |
-| Cost / footprint | Free | Commercial, heavy | Free (MIT-0), one `pip install` |
+| Cost / footprint | Free | Commercial, heavy | Free (MIT-0), one `pip install` or `dotnet tool install` |
 
 ## Responsible use
 
@@ -227,7 +300,7 @@ deliberately not a bot.
 ## Documentation
 
 - [Mapping reference](docs/mapping-reference.md)
-- [Architecture and design principles](docs/architecture.md)
+- [Architecture, design principles and how the two implementations stay in step](docs/architecture.md)
 - [Contributing](CONTRIBUTING.md) · [Security policy](SECURITY.md) · [Changelog](CHANGELOG.md)
 
 ## Roadmap
@@ -243,26 +316,48 @@ Ideas and votes are welcome in the issues.
 ## Project layout
 
 ```
-crossfill/
-├── cli.py           # crossfill run / validate / serve
-├── engine.py        # open target → two-pass match → type-aware fill → verify
-├── matcher.py       # synonym scoring (pure) + candidate collection
-├── mapping.py       # load + validate mapping files
-├── sources.py       # web page, JSON and CSV records
-├── mappings/        # bundled sample mapping (local test Form B)
-├── schema/          # JSON Schema for mapping files
-└── web/             # optional demo app (Flask): Form A, test Form B
-examples/            # sample mappings and data
-docs/                # reference and architecture
-tests/               # unit, web and end-to-end (local only) tests
+spec/                    # shared by both implementations
+├── schema/              # JSON Schema for mapping files
+├── mappings/            # bundled sample mapping (local test Form B)
+└── conformance/         # behaviour cases both test suites must pass
+examples/                # sample mappings and data
+docs/                    # reference and architecture
+
+python/
+├── crossfill/
+│   ├── cli.py           # crossfill run / validate / serve
+│   ├── engine.py        # open target → two-pass match → type-aware fill → verify
+│   ├── matcher.py       # synonym scoring (pure) + candidate collection
+│   ├── mapping.py       # load + validate mapping files
+│   ├── sources.py       # web page, JSON and CSV records
+│   └── web/             # optional demo app (Flask): Form A, test Form B
+├── tests/               # unit, web, end-to-end and conformance tests
+└── sync_spec.py         # copies spec/ files into the package
+
+dotnet/
+├── src/
+│   ├── CrossFill.Core/  # Mapping, Matcher, Sources, Engine (the library)
+│   ├── CrossFill.Web/   # demo app (ASP.NET Core + Razor): Form A, test Form B
+│   └── CrossFill.Cli/   # the crossfill tool
+└── tests/CrossFill.Tests/   # unit, web, end-to-end and conformance tests
 ```
 
 ## Tests
 
+Browser tests use only the local test Form B.
+
 ```bash
+# Python
+cd python
 pip install -e ".[dev]" && playwright install chromium
 pytest -m "not browser"    # fast, no browser
-pytest                     # everything; browser tests use only the local test Form B
+pytest                     # everything
+
+# .NET
+cd dotnet
+dotnet build
+dotnet test --filter "Category!=browser"    # fast, no browser
+dotnet test                                 # everything, on .NET 11 and .NET 10
 ```
 
 ## License and reuse

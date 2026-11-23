@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 
 import pytest
-from conftest import ROOT
+from conftest import REPO_ROOT
 
 from crossfill import MappingError, SourceError, load_mapping, load_record, load_records, validate_mapping
 from crossfill.cli import main
@@ -29,7 +29,7 @@ def test_bundled_mapping_matches_json_schema():
     jsonschema.validate(json.loads(DEFAULT_MAPPING.read_text(encoding="utf-8")), schema)
 
 
-@pytest.mark.parametrize("path", sorted((ROOT / "examples" / "mappings").glob("*.json")),
+@pytest.mark.parametrize("path", sorted((REPO_ROOT / "examples" / "mappings").glob("*.json")),
                          ids=lambda p: p.name)
 def test_example_mappings_are_valid(path, clean_env):
     load_mapping(path)
@@ -39,8 +39,8 @@ def test_example_mappings_are_valid(path, clean_env):
 
 
 def test_example_data_files_load():
-    assert load_record(ROOT / "examples" / "data" / "record.json")["newsletter"] == "true"
-    assert len(load_records(ROOT / "examples" / "data" / "contacts.csv")) == 2
+    assert load_record(REPO_ROOT / "examples" / "data" / "record.json")["newsletter"] == "true"
+    assert len(load_records(REPO_ROOT / "examples" / "data" / "contacts.csv")) == 2
 
 
 def test_target_url_override(clean_env, monkeypatch):

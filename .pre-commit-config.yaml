@@ -11,11 +11,19 @@ repos:
       - id: check-toml
       - id: check-yaml
       - id: end-of-file-fixer
+        exclude: ^spec/conformance/data/
       - id: trailing-whitespace
+        exclude: ^spec/conformance/data/
   - repo: local
     hooks:
       - id: crossfill-validate
         name: validate CrossFill mappings
         entry: crossfill validate
         language: system
-        files: '(crossfill/mappings|examples/mappings)/.*\.json$'
+        files: '(spec/mappings|python/crossfill/mappings|examples/mappings)/.*\.json$'
+      - id: crossfill-spec-sync
+        name: copy spec/ files into the Python package
+        entry: python python/sync_spec.py
+        language: system
+        files: '^(spec/(mappings|schema)/.*|LICENSE)$'
+        pass_filenames: false

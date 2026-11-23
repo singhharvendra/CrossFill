@@ -1,0 +1,830 @@
+{
+  "$comment": "Shared behaviour cases. The Python and .NET test suites both run every case, so the two implementations must agree. 'error' is the exact message; 'error_prefix' is used where the text after it comes from the language's own JSON parser. '{path}' stands for the data file's path.",
+  "mapping_validation": [
+    {
+      "name": "minimal mapping gets defaults",
+      "mapping": {
+        "target_url": "https://x.example",
+        "fields": {}
+      },
+      "result": {
+        "version": 1,
+        "form_selector": "form"
+      }
+    },
+    {
+      "name": "full mapping",
+      "mapping": {
+        "$schema": "x",
+        "version": 1,
+        "name": "n",
+        "description": "d",
+        "target_url": "http://127.0.0.1:5000/form-b",
+        "form_selector": "form#c",
+        "fields": {
+          "name": "#n"
+        },
+        "source": {
+          "url": "file:///tmp/a.html",
+          "fields": {
+            "name": "#a"
+          }
+        },
+        "synonyms": {
+          "message": [
+            "how can we help"
+          ]
+        }
+      },
+      "result": {
+        "version": 1,
+        "form_selector": "form#c"
+      }
+    },
+    {
+      "name": "uppercase scheme allowed",
+      "mapping": {
+        "target_url": "HTTPS://X.EXAMPLE",
+        "fields": {}
+      },
+      "result": {
+        "version": 1,
+        "form_selector": "form"
+      }
+    },
+    {
+      "name": "top level must be object",
+      "mapping": [],
+      "error": "mapping: top level must be a JSON object"
+    },
+    {
+      "name": "missing target_url",
+      "mapping": {
+        "fields": {}
+      },
+      "error": "mapping: missing required key 'target_url'"
+    },
+    {
+      "name": "missing fields",
+      "mapping": {
+        "target_url": "https://x.example"
+      },
+      "error": "mapping: missing required key 'fields'"
+    },
+    {
+      "name": "javascript url rejected",
+      "mapping": {
+        "target_url": "javascript:alert(1)",
+        "fields": {}
+      },
+      "error": "mapping: target_url must start with http://, https:// or file:// (got 'javascript:alert(1)')"
+    },
+    {
+      "name": "empty target_url",
+      "mapping": {
+        "target_url": "  ",
+        "fields": {}
+      },
+      "error": "mapping: target_url must be a non-empty string"
+    },
+    {
+      "name": "non-string target_url",
+      "mapping": {
+        "target_url": 5,
+        "fields": {}
+      },
+      "error": "mapping: target_url must be a non-empty string"
+    },
+    {
+      "name": "empty selector",
+      "mapping": {
+        "target_url": "https://x.example",
+        "fields": {
+          "a": ""
+        }
+      },
+      "error": "mapping: fields.a must be a non-empty CSS selector string"
+    },
+    {
+      "name": "non-string selector",
+      "mapping": {
+        "target_url": "https://x.example",
+        "fields": {
+          "a": 1
+        }
+      },
+      "error": "mapping: fields.a must be a non-empty CSS selector string"
+    },
+    {
+      "name": "fields not an object",
+      "mapping": {
+        "target_url": "https://x.example",
+        "fields": []
+      },
+      "error": "mapping: fields must be an object of field name -> CSS selector"
+    },
+    {
+      "name": "typo key",
+      "mapping": {
+        "target_url": "https://x.example",
+        "fields": {},
+        "feilds": {}
+      },
+      "error": "mapping: unknown key(s) ['feilds']; check for typos"
+    },
+    {
+      "name": "several unknown keys sorted",
+      "mapping": {
+        "target_url": "https://x.example",
+        "fields": {},
+        "zeta": 1,
+        "alpha": 2
+      },
+      "error": "mapping: unknown key(s) ['alpha', 'zeta']; check for typos"
+    },
+    {
+      "name": "unsupported version",
+      "mapping": {
+        "target_url": "https://x.example",
+        "fields": {},
+        "version": 9
+      },
+      "error": "mapping: unsupported version 9; this CrossFill reads version 1"
+    },
+    {
+      "name": "empty form_selector",
+      "mapping": {
+        "target_url": "https://x.example",
+        "fields": {},
+        "form_selector": ""
+      },
+      "error": "mapping: form_selector must be a non-empty CSS selector"
+    },
+    {
+      "name": "source not an object",
+      "mapping": {
+        "target_url": "https://x.example",
+        "fields": {},
+        "source": "x"
+      },
+      "error": "mapping: source must be an object"
+    },
+    {
+      "name": "bad source url",
+      "mapping": {
+        "target_url": "https://x.example",
+        "fields": {},
+        "source": {
+          "url": "ftp://x"
+        }
+      },
+      "error": "mapping: source.url must start with http://, https:// or file:// (got 'ftp://x')"
+    },
+    {
+      "name": "bad source fields",
+      "mapping": {
+        "target_url": "https://x.example",
+        "fields": {},
+        "source": {
+          "fields": {
+            "a": " "
+          }
+        }
+      },
+      "error": "mapping: source.fields.a must be a non-empty CSS selector string"
+    },
+    {
+      "name": "empty synonym list",
+      "mapping": {
+        "target_url": "https://x.example",
+        "fields": {},
+        "synonyms": {
+          "a": []
+        }
+      },
+      "error": "mapping: synonyms must map each field name to a non-empty list of strings"
+    },
+    {
+      "name": "synonyms not an object",
+      "mapping": {
+        "target_url": "https://x.example",
+        "fields": {},
+        "synonyms": [
+          "a"
+        ]
+      },
+      "error": "mapping: synonyms must map each field name to a non-empty list of strings"
+    },
+    {
+      "name": "empty synonym word",
+      "mapping": {
+        "target_url": "https://x.example",
+        "fields": {},
+        "synonyms": {
+          "a": [
+            ""
+          ]
+        }
+      },
+      "error": "mapping: synonyms must map each field name to a non-empty list of strings"
+    }
+  ],
+  "synonyms_for": [
+    {
+      "field": "name",
+      "expect": [
+        "fullname",
+        "full name",
+        "full_name",
+        "yourname",
+        "name"
+      ]
+    },
+    {
+      "field": "email",
+      "expect": [
+        "emailid",
+        "email",
+        "e-mail",
+        "mail"
+      ]
+    },
+    {
+      "field": "topic",
+      "expect": [
+        "topic"
+      ]
+    },
+    {
+      "field": "Custom_Key",
+      "expect": [
+        "custom_key"
+      ]
+    },
+    {
+      "field": "topic",
+      "expect": [
+        "subject",
+        "topic"
+      ],
+      "synonyms": {
+        "topic": [
+          "Subject",
+          "TOPIC"
+        ]
+      }
+    },
+    {
+      "field": "name",
+      "expect": [
+        "full name",
+        "applicant",
+        "fullname",
+        "full_name",
+        "yourname",
+        "name"
+      ],
+      "synonyms": {
+        "name": [
+          "Full Name",
+          "Applicant"
+        ]
+      }
+    }
+  ],
+  "score": [
+    {
+      "field": "name",
+      "text": "ufullname full name",
+      "type": "text",
+      "expect": 100
+    },
+    {
+      "field": "name",
+      "text": "uname",
+      "type": "text",
+      "expect": 96
+    },
+    {
+      "field": "email",
+      "text": "unrelated",
+      "type": "text",
+      "expect": 0
+    },
+    {
+      "field": "email",
+      "text": "uemailid",
+      "type": "email",
+      "expect": 120
+    },
+    {
+      "field": "email",
+      "text": "uemailid",
+      "type": "text",
+      "expect": 100
+    },
+    {
+      "field": "email",
+      "text": "nothing here",
+      "type": "email",
+      "expect": 0
+    },
+    {
+      "field": "phone",
+      "text": "ucontactno contact no.",
+      "type": "tel",
+      "expect": 120
+    },
+    {
+      "field": "phone",
+      "text": "mobile",
+      "type": "text",
+      "expect": 98
+    },
+    {
+      "field": "message",
+      "text": "umsg type your message",
+      "type": "textarea",
+      "expect": 120
+    },
+    {
+      "field": "message",
+      "text": "notes",
+      "type": "textarea",
+      "expect": 0
+    },
+    {
+      "field": "topic",
+      "text": "your subject",
+      "type": "text",
+      "expect": 0
+    },
+    {
+      "field": "topic",
+      "text": "your subject",
+      "type": "text",
+      "expect": 100,
+      "synonyms": {
+        "topic": [
+          "subject"
+        ]
+      }
+    },
+    {
+      "field": "zip",
+      "text": "postal code",
+      "type": "text",
+      "expect": 98
+    },
+    {
+      "field": "custom",
+      "text": "my custom field",
+      "type": "text",
+      "expect": 100
+    }
+  ],
+  "best_candidate": [
+    {
+      "field": "name",
+      "candidates": [
+        {
+          "index": 0,
+          "type": "text",
+          "text": "ufullname"
+        },
+        {
+          "index": 1,
+          "type": "email",
+          "text": "uemailid"
+        },
+        {
+          "index": 2,
+          "type": "text",
+          "text": "full name backup"
+        },
+        {
+          "index": 4,
+          "type": "textarea",
+          "text": "umsg message"
+        }
+      ],
+      "taken": [],
+      "expect": 0
+    },
+    {
+      "field": "name",
+      "candidates": [
+        {
+          "index": 0,
+          "type": "text",
+          "text": "ufullname"
+        },
+        {
+          "index": 1,
+          "type": "email",
+          "text": "uemailid"
+        },
+        {
+          "index": 2,
+          "type": "text",
+          "text": "full name backup"
+        },
+        {
+          "index": 4,
+          "type": "textarea",
+          "text": "umsg message"
+        }
+      ],
+      "taken": [
+        0
+      ],
+      "expect": 2
+    },
+    {
+      "field": "name",
+      "candidates": [
+        {
+          "index": 0,
+          "type": "text",
+          "text": "ufullname"
+        },
+        {
+          "index": 1,
+          "type": "email",
+          "text": "uemailid"
+        },
+        {
+          "index": 2,
+          "type": "text",
+          "text": "full name backup"
+        },
+        {
+          "index": 4,
+          "type": "textarea",
+          "text": "umsg message"
+        }
+      ],
+      "taken": [
+        0,
+        2
+      ],
+      "expect": null
+    },
+    {
+      "field": "email",
+      "candidates": [
+        {
+          "index": 0,
+          "type": "text",
+          "text": "ufullname"
+        },
+        {
+          "index": 1,
+          "type": "email",
+          "text": "uemailid"
+        },
+        {
+          "index": 2,
+          "type": "text",
+          "text": "full name backup"
+        },
+        {
+          "index": 4,
+          "type": "textarea",
+          "text": "umsg message"
+        }
+      ],
+      "taken": [],
+      "expect": 1
+    },
+    {
+      "field": "message",
+      "candidates": [
+        {
+          "index": 0,
+          "type": "text",
+          "text": "ufullname"
+        },
+        {
+          "index": 1,
+          "type": "email",
+          "text": "uemailid"
+        },
+        {
+          "index": 2,
+          "type": "text",
+          "text": "full name backup"
+        },
+        {
+          "index": 4,
+          "type": "textarea",
+          "text": "umsg message"
+        }
+      ],
+      "taken": [],
+      "expect": 4
+    },
+    {
+      "field": "message",
+      "candidates": [
+        {
+          "index": 0,
+          "type": "text",
+          "text": "ufullname"
+        },
+        {
+          "index": 1,
+          "type": "email",
+          "text": "uemailid"
+        },
+        {
+          "index": 2,
+          "type": "text",
+          "text": "full name backup"
+        },
+        {
+          "index": 4,
+          "type": "textarea",
+          "text": "umsg message"
+        }
+      ],
+      "taken": [
+        4
+      ],
+      "expect": null
+    },
+    {
+      "field": "company",
+      "candidates": [
+        {
+          "index": 0,
+          "type": "text",
+          "text": "ufullname"
+        },
+        {
+          "index": 1,
+          "type": "email",
+          "text": "uemailid"
+        },
+        {
+          "index": 2,
+          "type": "text",
+          "text": "full name backup"
+        },
+        {
+          "index": 4,
+          "type": "textarea",
+          "text": "umsg message"
+        }
+      ],
+      "taken": [],
+      "expect": null
+    },
+    {
+      "field": "company",
+      "candidates": [
+        {
+          "index": 0,
+          "type": "text",
+          "text": "ufullname"
+        },
+        {
+          "index": 1,
+          "type": "email",
+          "text": "uemailid"
+        },
+        {
+          "index": 2,
+          "type": "text",
+          "text": "full name backup"
+        },
+        {
+          "index": 4,
+          "type": "textarea",
+          "text": "umsg message"
+        }
+      ],
+      "taken": [],
+      "expect": 2,
+      "synonyms": {
+        "company": [
+          "backup"
+        ]
+      }
+    }
+  ],
+  "records": [
+    {
+      "file": "broken.json",
+      "error_prefix": "{path}: invalid JSON at line 2"
+    },
+    {
+      "file": "empty-list.json",
+      "error": "{path}: no records found"
+    },
+    {
+      "file": "extra-column.csv",
+      "error": "{path} record 0: field 'None' must be a plain value, not list"
+    },
+    {
+      "file": "header-only.csv",
+      "error": "{path}: no records found"
+    },
+    {
+      "file": "list-value.json",
+      "error": "{path} record 0: field 'tags' must be a plain value, not list"
+    },
+    {
+      "file": "mixed-types.json",
+      "records": [
+        {
+          "name": "Ada",
+          "age": "36",
+          "score": "1.5",
+          "member": "true",
+          "guest": "false",
+          "nickname": ""
+        },
+        {
+          "name": "Grace",
+          "age": "85"
+        }
+      ]
+    },
+    {
+      "file": "nested.json",
+      "error": "{path} record 0: field 'address' must be a plain value, not dict"
+    },
+    {
+      "file": "scalars.json",
+      "error": "{path} record 0: each record must be an object of field -> value"
+    },
+    {
+      "file": "tricky.csv",
+      "records": [
+        {
+          "name": "Ada",
+          "email": "ada@example.com",
+          "message": "Hello, world"
+        },
+        {
+          "name": "Grace \"Amazing\" Hopper",
+          "email": "grace@example.com",
+          "message": "Line one\r\nLine two"
+        },
+        {
+          "name": "Short",
+          "email": "short@example.com",
+          "message": ""
+        }
+      ]
+    },
+    {
+      "file": "unsupported.txt",
+      "error": "{path}: unsupported data file type '.txt' (use .json or .csv)"
+    }
+  ],
+  "contact_validation": [
+    {
+      "name": "complete",
+      "form": "a",
+      "values": {
+        "name": "Ada",
+        "email": "ada@example.com",
+        "phone": "1",
+        "message": "Hi",
+        "topic": "sales",
+        "contact_method": "email",
+        "newsletter": "true"
+      },
+      "errors": []
+    },
+    {
+      "name": "newsletter optional",
+      "form": "a",
+      "values": {
+        "name": "Ada",
+        "email": "ada@example.com",
+        "phone": "1",
+        "message": "Hi",
+        "topic": "sales",
+        "contact_method": "email",
+        "newsletter": ""
+      },
+      "errors": []
+    },
+    {
+      "name": "topic label case-insensitive",
+      "form": "a",
+      "values": {
+        "name": "Ada",
+        "email": "ada@example.com",
+        "phone": "1",
+        "message": "Hi",
+        "topic": "Support",
+        "contact_method": "PHONE",
+        "newsletter": "true"
+      },
+      "errors": []
+    },
+    {
+      "name": "missing several",
+      "form": "a",
+      "values": {
+        "name": "Ada",
+        "email": "ada@example.com",
+        "phone": "",
+        "message": "Hi",
+        "topic": "  ",
+        "contact_method": "email",
+        "newsletter": "true"
+      },
+      "errors": [
+        "Please fill in: Phone, Topic."
+      ]
+    },
+    {
+      "name": "everything empty",
+      "form": "a",
+      "values": {},
+      "errors": [
+        "Please fill in: Name, Email, Phone, Message, Topic, Contact method."
+      ]
+    },
+    {
+      "name": "bad email",
+      "form": "a",
+      "values": {
+        "name": "Ada",
+        "email": "a@b",
+        "phone": "1",
+        "message": "Hi",
+        "topic": "sales",
+        "contact_method": "email",
+        "newsletter": "true"
+      },
+      "errors": [
+        "Email address is not valid."
+      ]
+    },
+    {
+      "name": "bad topic",
+      "form": "a",
+      "values": {
+        "name": "Ada",
+        "email": "ada@example.com",
+        "phone": "1",
+        "message": "Hi",
+        "topic": "billing",
+        "contact_method": "email",
+        "newsletter": "true"
+      },
+      "errors": [
+        "Please choose a topic from the list."
+      ]
+    },
+    {
+      "name": "bad contact",
+      "form": "a",
+      "values": {
+        "name": "Ada",
+        "email": "ada@example.com",
+        "phone": "1",
+        "message": "Hi",
+        "topic": "sales",
+        "contact_method": "fax",
+        "newsletter": "true"
+      },
+      "errors": [
+        "Preferred contact must be Email or Phone."
+      ]
+    },
+    {
+      "name": "several problems",
+      "form": "a",
+      "values": {
+        "name": "x",
+        "email": "not-an-email",
+        "topic": "billing"
+      },
+      "errors": [
+        "Please fill in: Phone, Message, Contact method.",
+        "Email address is not valid.",
+        "Please choose a topic from the list."
+      ]
+    },
+    {
+      "name": "form b incomplete",
+      "form": "b",
+      "values": {
+        "ufullname": "Test",
+        "uemailid": "not-an-email",
+        "utopic": ""
+      },
+      "errors": [
+        "Please fill in: Phone, Message, Topic, Contact method.",
+        "Email address is not valid."
+      ]
+    }
+  ]
+}

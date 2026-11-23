@@ -31,6 +31,6 @@ body:
     id: version
     attributes:
       label: Versions
-      description: "`crossfill --version`, Python version, OS, browser"
+      description: "`crossfill --version`, Python or .NET version, OS, browser"
     validations:
       required: true

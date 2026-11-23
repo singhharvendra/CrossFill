@@ -54,6 +54,7 @@ crossfill = "crossfill.cli:main"
 [project.urls]
 Homepage = "https://github.com/singhharvendra/CrossFill"
 Documentation = "https://github.com/singhharvendra/CrossFill/tree/main/docs"
+Source = "https://github.com/singhharvendra/CrossFill/tree/main/python"
 Issues = "https://github.com/singhharvendra/CrossFill/issues"
 Changelog = "https://github.com/singhharvendra/CrossFill/blob/main/CHANGELOG.md"
 

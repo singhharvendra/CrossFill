@@ -8,8 +8,15 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
 
-[*.{json,yml,yaml,html,toml}]
+[*.{json,yml,yaml,html,toml,csproj,props,slnx}]
 indent_size = 2
+
+[spec/conformance/data/**]
+# Test fixtures: line endings and byte-order marks are part of the test.
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+charset = unset
 
 [*.bat]
 end_of_line = crlf

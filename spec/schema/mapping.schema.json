@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CrossFill mapping",
+  "description": "Describes a target web form for CrossFill: where it is and which CSS selector holds each field.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["target_url", "fields"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": {
+      "description": "Mapping format version.",
+      "const": 1
+    },
+    "name": { "type": "string", "description": "Human-readable name of the target." },
+    "description": { "type": "string" },
+    "target_url": {
+      "type": "string",
+      "pattern": "^(https?|file)://",
+      "description": "URL of the page that contains the target form."
+    },
+    "form_selector": {
+      "type": "string",
+      "minLength": 1,
+      "default": "form",
+      "description": "CSS selector of the one form to fill. Elements outside it (login pop-ups, newsletters) are never touched."
+    },
+    "fields": {
+      "$ref": "#/$defs/selectorMap",
+      "description": "Field name -> CSS selector inside form_selector. Fields left out are found by automatic matching."
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Where to read data from when the source is a web page.",
+      "properties": {
+        "url": { "type": "string", "pattern": "^(https?|file)://" },
+        "fields": { "$ref": "#/$defs/selectorMap" }
+      }
+    },
+    "synonyms": {
+      "type": "object",
+      "description": "Extra words the automatic matcher should look for, per field. Checked before the built-in synonyms.",
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 1,
+        "items": { "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "$defs": {
+    "selectorMap": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "minLength": 1 }
+    }
+  }
+}

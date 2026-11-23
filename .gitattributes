@@ -1,0 +1,3 @@
+# Keep the conformance data files byte-for-byte (CRLF and BOM are part of the test).
+spec/conformance/data/** -text
+*.bat text eol=crlf

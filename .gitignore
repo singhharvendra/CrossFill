@@ -17,6 +17,14 @@ htmlcov/
 .tox/
 .nox/
 
+# .NET
+bin/
+obj/
+TestResults/
+artifacts/
+*.user
+*.nupkg
+
 # Environment / secrets
 .env
 .env.*

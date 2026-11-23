@@ -1,16 +1,22 @@
-name: CI
+name: Python
 
 on:
   push:
     branches: [main]
+    paths: ["python/**", "spec/**", "examples/**", "LICENSE", ".github/workflows/python.yml"]
   pull_request:
+    paths: ["python/**", "spec/**", "examples/**", "LICENSE", ".github/workflows/python.yml"]
 
 permissions:
   contents: read
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: python-${{ github.ref }}
   cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: python
 
 jobs:
   lint:
@@ -40,21 +46,22 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
           cache: pip
+          cache-dependency-path: python/pyproject.toml
       - name: Install
         run: |
           python -m pip install --upgrade pip
           pip install -e ".[dev]"
           python -m playwright install --with-deps chromium
-      - name: Validate bundled and example mappings
-        run: crossfill validate crossfill/mappings/*.json examples/mappings/*.json
+      - name: Validate bundled, shared and example mappings
+        run: crossfill validate crossfill/mappings/*.json ../spec/mappings/*.json ../examples/mappings/*.json
         shell: bash
-      - name: Test
+      - name: Test (includes the shared conformance cases)
         run: pytest --cov --cov-report=term --cov-report=xml
       - uses: actions/upload-artifact@v4
         if: matrix.os == 'ubuntu-latest' && matrix.python == '3.13'
         with:
-          name: coverage
-          path: coverage.xml
+          name: python-coverage
+          path: python/coverage.xml
 
   build:
     needs: test

@@ -1,0 +1,37 @@
+# Publishes the .NET packages (CrossFill.Core library, CrossFill.Cli tool) to NuGet
+# when a tag dotnet-v1.2.3 is pushed.
+# One-time setup: add a NuGet API key as the repository secret NUGET_API_KEY and
+# create a GitHub environment "nuget".
+name: Release (.NET)
+
+on:
+  push:
+    tags: ["dotnet-v*"]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: nuget
+    permissions:
+      contents: write      # create the GitHub release
+    defaults:
+      run:
+        working-directory: dotnet
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            10.0.x
+            11.0.x
+      - name: Check tag matches package version
+        run: |
+          VERSION=$(grep -oP '(?<=<Version>)[^<]+' Directory.Build.props)
+          test "dotnet-v$VERSION" = "${GITHUB_REF_NAME}" || { echo "Tag ${GITHUB_REF_NAME} != dotnet-v$VERSION"; exit 1; }
+      - run: dotnet pack -c Release -o ../artifacts
+      - name: Push to NuGet
+        run: dotnet nuget push "../artifacts/*.nupkg" --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" ../artifacts/*.nupkg --repo "$GITHUB_REPOSITORY" --title "CrossFill for .NET ${GITHUB_REF_NAME#dotnet-v}" --generate-notes

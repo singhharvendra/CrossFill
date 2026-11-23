@@ -5,7 +5,8 @@ CSS selector holds each field. Anything not listed is found by the automatic
 matcher (see :mod:`crossfill.matcher`).
 
 The format is documented in ``docs/mapping-reference.md`` and described by the
-JSON Schema in ``crossfill/schema/mapping.schema.json``. Validation here is
+JSON Schema in ``spec/schema/mapping.schema.json`` (bundled here as
+``crossfill/schema/mapping.schema.json``). Validation here is
 deliberately dependency-free so the core package stays small.
 """
 

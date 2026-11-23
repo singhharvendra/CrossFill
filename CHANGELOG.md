@@ -7,6 +7,16 @@ All notable changes are recorded here. The format follows
 ## [Unreleased]
 
 ### Added
+- **A .NET implementation** in `dotnet/`, for .NET 11 and .NET 10 (LTS), with
+  the same behaviour as the Python one: the `crossfill` tool (`run`,
+  `validate`, `serve`, same options, exit codes and `CROSSFILL_RESULT` line),
+  the `CrossFill.Core` library, and the demo web app on ASP.NET Core. The tool
+  also has `crossfill playwright install chromium` for installing the browser.
+- **Shared spec and conformance cases** in `spec/`: the mapping schema, the
+  sample mapping and `spec/conformance/cases.json`, which both test suites run
+  so the two implementations cannot drift apart.
+- Separate CI workflows and release tags for each implementation
+  (`py-vX.Y.Z` → PyPI, `dotnet-vX.Y.Z` → NuGet).
 - The demo Form A now has a dropdown (Topic), a radio group (Preferred
   contact) and a checkbox (Newsletter) as well as text fields, and opens
   pre-filled with sample data. Form B has matching fields, so every field type
@@ -18,6 +28,10 @@ All notable changes are recorded here. The format follows
   credit or license notice needed.
 
 ### Changed
+- **Repository layout.** The Python package, its tests and `run.bat` moved to
+  `python/`. The mapping schema and sample mapping now live in `spec/` (the
+  Python package bundles copies). Mapping files should point `$schema` at
+  `spec/schema/mapping.schema.json`.
 - Form B (the local test target) uses a compact two-column layout, so the whole
   page fits on a laptop screen (1280×720 and up) without scrolling, including
   after a submission or with validation errors. On phones the columns stack.

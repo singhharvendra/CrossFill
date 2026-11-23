@@ -1,5 +1,5 @@
 {
-  "$schema": "../../crossfill/schema/mapping.schema.json",
+  "$schema": "../../spec/schema/mapping.schema.json",
   "version": 1,
   "name": "Local test Form B, automatic matching only",
   "description": "No selectors at all: every field is found by name, id, placeholder or label.",

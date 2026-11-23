@@ -1,5 +1,5 @@
 {
-  "$schema": "../../crossfill/schema/mapping.schema.json",
+  "$schema": "../../spec/schema/mapping.schema.json",
   "version": 1,
   "name": "Example: a contact form on another site",
   "description": "Copy this file, change target_url and the selectors, then run `crossfill validate` and `crossfill run --dry-run`.",
