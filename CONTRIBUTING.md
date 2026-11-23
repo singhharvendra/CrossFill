@@ -34,12 +34,12 @@ pre-commit install          # optional: lint, validate mappings and sync spec/ o
 
 ### .NET
 
-Install the .NET 11 SDK (add the .NET 10 runtime to also test the LTS target).
+Install the .NET 11 SDK.
 
 ```bash
 cd CrossFill/dotnet
 dotnet build
-dotnet run --project src/CrossFill.Cli -f net11.0 -- playwright install chromium
+dotnet run --project src/CrossFill.Cli -- playwright install chromium
 ```
 
 ## Checks to run before opening a PR
@@ -58,7 +58,7 @@ dotnet test                                # everything, including headless brow
 ```
 
 CI runs the same commands on Linux, Windows and macOS, with Python 3.9 to 3.13
-and with .NET 10 and .NET 11.
+and with .NET 11.
 
 ## Making a change
 

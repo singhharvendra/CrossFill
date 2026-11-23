@@ -1,7 +1,7 @@
 @echo off
 REM CrossFill for .NET - one-click build and run on Windows
 cd /d "%~dp0"
-dotnet build src\CrossFill.Cli -c Release -f net11.0 -v quiet || goto :error
+dotnet build src\CrossFill.Cli -c Release -v quiet || goto :error
 set CROSSFILL=src\CrossFill.Cli\bin\Release\net11.0\crossfill.exe
 if not exist "%LOCALAPPDATA%\ms-playwright" (
     echo Installing Chromium for Playwright...

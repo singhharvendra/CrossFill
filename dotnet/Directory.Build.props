@@ -3,8 +3,7 @@
        (a test checks this). -->
   <PropertyGroup>
     <Version>0.2.0</Version>
-    <!-- net11.0 is the latest release; net10.0 is the long-term-support release. -->
-    <TargetFrameworks>net11.0;net10.0</TargetFrameworks>
+    <TargetFramework>net11.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>

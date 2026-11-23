@@ -28,7 +28,7 @@ serve the same demo. Pick whichever fits your stack.
 | | **Python** | **.NET** |
 |---|---|---|
 | Folder | [`python/`](python) | [`dotnet/`](dotnet) |
-| Requires | Python 3.9+ | .NET 11 (latest) or .NET 10 (LTS) |
+| Requires | Python 3.9+ | .NET 11 |
 | Command line | `crossfill` | `crossfill` |
 | Library | `pip install crossfill` | `dotnet add package CrossFill.Core` |
 | Demo web app | Flask | ASP.NET Core |
@@ -100,7 +100,7 @@ pip install -e ".[web]"
 
 ### .NET
 
-Requires the .NET 11 or .NET 10 SDK (or the ASP.NET Core runtime for the tool alone).
+Requires the .NET 11 SDK (or the .NET 11 ASP.NET Core runtime for the tool alone).
 
 ```bash
 dotnet tool install --global CrossFill.Cli     # the crossfill command
@@ -357,7 +357,7 @@ pytest                     # everything
 cd dotnet
 dotnet build
 dotnet test --filter "Category!=browser"    # fast, no browser
-dotnet test                                 # everything, on .NET 11 and .NET 10
+dotnet test                                 # everything
 ```
 
 ## License and reuse

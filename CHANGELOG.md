@@ -7,7 +7,7 @@ All notable changes are recorded here. The format follows
 ## [Unreleased]
 
 ### Added
-- **A .NET implementation** in `dotnet/`, for .NET 11 and .NET 10 (LTS), with
+- **A .NET implementation** in `dotnet/`, for .NET 11, with
   the same behaviour as the Python one: the `crossfill` tool (`run`,
   `validate`, `serve`, same options, exit codes and `CROSSFILL_RESULT` line),
   the `CrossFill.Core` library, and the demo web app on ASP.NET Core. The tool

@@ -6,8 +6,7 @@ CrossFill reads a record (from a web page, JSON or CSV), opens the target
 form, finds the matching fields, fills them, reads every value back to verify
 it, and stops. You review the form and press Submit yourself.
 
-This is the .NET implementation, for .NET 11 and .NET 10 (LTS). It behaves
-the same as the [Python implementation](https://github.com/singhharvendra/CrossFill/tree/main/python):
+This is the .NET implementation, for .NET 11. It behaves the same as the [Python implementation](https://github.com/singhharvendra/CrossFill/tree/main/python):
 same mapping files, same command-line options, same results.
 
 | Package | What it is |
@@ -50,12 +49,11 @@ From this folder:
 dotnet build                                        # warnings are errors
 dotnet run --project src/CrossFill.Cli -- playwright install chromium
 dotnet test --filter "Category!=browser"            # fast
-dotnet test                                         # everything, on .NET 11 and .NET 10
+dotnet test                                         # everything
 ```
 
-`dotnet test` runs each target framework that has a runtime installed. The
-shared `spec/` files (mapping schema, sample mapping, conformance cases) are
-linked into the build directly.
+The shared `spec/` files (mapping schema, sample mapping, conformance cases)
+are linked into the build directly.
 
 Full documentation: <https://github.com/singhharvendra/CrossFill>
 
